@@ -18,10 +18,10 @@ final class CityViewModel: ObservableObject {
     private let weatherService = WeatherService()
     private var bag = Set<AnyCancellable>()
     
-    init() {
+    func getCurrentWeather(coordinates: Coordinates) {
         Publishers.CombineLatest(
-            weatherService.getCurrentWeather(),
-            weatherService.getForecast()
+            weatherService.getCurrentWeather(coordinates: coordinates),
+            weatherService.getForecast(coordinates: coordinates)
         )
         .receive(on: RunLoop.main)
         .sink { completion in
@@ -55,8 +55,10 @@ private extension CityViewModel {
             .enumerated()
             .forEach { forecast in
                 let element = forecast.element
+                let isDateEqual = element.dt.day == date
+                let isLastElement = forecast.offset == forecastList.count - 1
                 
-                if element.dt.day == date || forecast.offset == forecastList.count - 1 {
+                if isDateEqual || isLastElement {
                     if element.main.tempMax > max {
                         max = element.main.tempMax
                     }
@@ -66,7 +68,7 @@ private extension CityViewModel {
                     }
                 }
                 
-                if element.dt.day != date || forecast.offset == forecastList.count - 1 {
+                if !isDateEqual || isLastElement {
                     dailyList.append(.init(
                         maxTemp: max,
                         minTemp: min,

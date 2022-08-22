@@ -9,24 +9,63 @@ import SwiftUI
 import Combine
 
 struct CityView: View {
+    let city: City
+    
+    @Environment(\.presentationMode) private var presentationMode
     @ObservedObject private var viewModel = CityViewModel()
     
     var body: some View {
         NavigationView {
+        VStack {
             if let weather = viewModel.weather,
                let hourly = viewModel.hourlyList,
                let daily = viewModel.dailyList {
-                List {
-                    CurrentWeatherView(weather: weather)
-                    configureHourlyWeatherSection(hourlyList: hourly)
-                    configureDailyWeatherSection(dailyList: daily)
+                configureWeatherList(
+                    weather: weather,
+                    hourlyList: hourly,
+                    dailyList: daily
+                )
+            }
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button("Отменить") {
+                    presentationMode.wrappedValue.dismiss()
                 }
             }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button("Добавить") {
+                    
+                }
+            }
+        }
+        .navigationBarHidden(!presentationMode.wrappedValue.isPresented)
+        }
+        .onAppear {
+            viewModel.getCurrentWeather(coordinates: .init(
+                lat: city.lat,
+                lon: city.lon
+            ))
         }
     }
 }
 
 private extension CityView {
+    
+    func configureWeatherList(
+        weather: CurrentWeather,
+        hourlyList: [Forecast],
+        dailyList: [DailyForecast]
+    ) -> some View {
+        List {
+            CurrentWeatherView(
+                weather: weather,
+                name: city.localName
+            )
+            configureHourlyWeatherSection(hourlyList: hourlyList)
+            configureDailyWeatherSection(dailyList: dailyList)
+        }
+    }
     
     func configureHourlyWeatherSection(hourlyList: [Forecast]) -> some View {
         Section {
@@ -55,6 +94,13 @@ private extension CityView {
 
 struct CityView_Previews: PreviewProvider {
     static var previews: some View {
-        CityView()
+        CityView(
+            city: .init(
+                name: "Yekaterinburg",
+                lat: 56.839104,
+                lon: 60.60825,
+                localNames: nil
+            )
+        )
     }
 }

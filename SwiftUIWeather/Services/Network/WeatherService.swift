@@ -9,8 +9,9 @@ import Foundation
 import Combine
 
 protocol WeatherServiceProtocol {
-    func getCurrentWeather() -> AnyPublisher<CurrentWeather, Error>
-    func getForecast() -> AnyPublisher<ForecastResponse, Error>
+    func getCurrentWeather(coordinates: Coordinates) -> AnyPublisher<CurrentWeather, Error>
+    func getForecast(coordinates: Coordinates) -> AnyPublisher<ForecastResponse, Error>
+    func findCity(name: String) -> AnyPublisher<[City], Error>
 }
 
 class WeatherService: WeatherServiceProtocol {
@@ -25,17 +26,25 @@ class WeatherService: WeatherServiceProtocol {
     }()
     
     
-    func getCurrentWeather() -> AnyPublisher<CurrentWeather, Error> {
+    func getCurrentWeather(coordinates: Coordinates) -> AnyPublisher<CurrentWeather, Error> {
         
-        apiService.request(from: .currentWeather)
+        apiService.request(from: .currentWeather(coordinates: coordinates))
             .decode(type: CurrentWeather.self, decoder: decoder)
             .eraseToAnyPublisher()
     }
     
-    func getForecast() -> AnyPublisher<ForecastResponse, Error> {
+    func getForecast(coordinates: Coordinates) -> AnyPublisher<ForecastResponse, Error> {
         
-        apiService.request(from: .forecast)
+        apiService.request(from: .forecast(coordinates: coordinates))
             .decode(type: ForecastResponse.self, decoder: decoder)
+            .eraseToAnyPublisher()
+    }
+    
+    func findCity(name: String) -> AnyPublisher<[City], Error> {
+        
+        apiService.request(from: .find(name: name))
+            .decode(type: [City].self, decoder: decoder)
+            .receive(on: RunLoop.main)
             .eraseToAnyPublisher()
     }
 }

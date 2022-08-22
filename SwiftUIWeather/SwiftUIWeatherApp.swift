@@ -13,7 +13,7 @@ struct SwiftUIWeatherApp: App {
 
     var body: some Scene {
         WindowGroup {
-            CityView()
+            FindCityView()
 //            ContentView()
 //                .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
