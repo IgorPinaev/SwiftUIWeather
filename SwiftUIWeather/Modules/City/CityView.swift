@@ -41,13 +41,13 @@ private extension CityView {
     
     var toolBarItems: some View {
         HStack {
-            Button("Отменить") {
+            Button("Cancel") {
                 presentationMode.wrappedValue.dismiss()
             }
             .padding(.leading)
             Spacer()
             if !isCitySaved {
-                Button("Добавить") {
+                Button("Add") {
                     viewModel.saveCity(city: city)
                     presentationMode.wrappedValue.dismiss()
                 }

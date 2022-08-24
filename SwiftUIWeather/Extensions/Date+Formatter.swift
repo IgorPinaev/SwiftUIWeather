@@ -18,7 +18,7 @@ extension Date {
     var day: String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "eeee"
-        dateFormatter.locale = Locale(identifier: "ru_RU")
+        dateFormatter.locale = Locale.current
         return dateFormatter.string(from: self)
     }
 }

@@ -56,7 +56,7 @@ private extension FindCityView {
             }
         } else {
             List(viewModel.cityList) { city in
-                Button(city.name) {
+                Button(city.localName) {
                     self.city = city
                     self.isCitySaved = cityEntities.contains(where: { $0.id == city.id })
                 }

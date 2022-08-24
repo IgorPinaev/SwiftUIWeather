@@ -18,7 +18,7 @@ struct CurrentWeatherView: View {
                 Text(name)
                     .font(.title)
                 Text(weather?.main.temp.toTempString ?? "--")
-                    .font(.custom("System", size: 56))
+                    .font(.system(size: 60))
                 Text(weather?.weather.first?.description ?? "")
             }
             Spacer()
