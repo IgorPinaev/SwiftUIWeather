@@ -18,9 +18,19 @@ struct City: Decodable, Hashable {
     }
 }
 
+extension City {
+    
+    init(from entity: CityEntity) {
+        name = entity.name
+        lat = entity.lat
+        lon = entity.lon
+        localNames = nil
+    }
+}
+
 extension City: Identifiable {
     
     var id: String {
-        return name + "\(lat)" + "\(lon)"
+        return "\(lat)" + "\(lon)"
     }
 }

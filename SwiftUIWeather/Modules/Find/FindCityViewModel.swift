@@ -21,8 +21,8 @@ final class FindCityViewModel: ObservableObject {
             .dropFirst()
             .debounce(for: 0.3, scheduler: RunLoop.main)
             .removeDuplicates()
-            .flatMap { [weak self] city in
-                self!.weatherService.findCity(name: city)
+            .flatMap { [weatherService] city in
+                weatherService.findCity(name: city)
                     .replaceError(with: [])
             }
             .assign(to: \.cityList, on: self)

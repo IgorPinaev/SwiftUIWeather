@@ -38,6 +38,11 @@ final class CityViewModel: ObservableObject {
         }
         .store(in: &bag)
     }
+    
+    func saveCity(city: City) {
+        CityEntity.save(from: city)
+        CoreDataService.shared.saveContext()
+    }
 }
 
 private extension CityViewModel {

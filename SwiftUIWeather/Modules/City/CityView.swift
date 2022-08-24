@@ -10,6 +10,7 @@ import Combine
 
 struct CityView: View {
     let city: City
+    let isCitySaved: Bool
     
     @Environment(\.presentationMode) private var presentationMode
     @ObservedObject private var viewModel = CityViewModel()
@@ -28,16 +29,7 @@ struct CityView: View {
             }
         }
         .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button("Отменить") {
-                    presentationMode.wrappedValue.dismiss()
-                }
-            }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button("Добавить") {
-                    
-                }
-            }
+            toolBarItems
         }
         .navigationBarHidden(!presentationMode.wrappedValue.isPresented)
         }
@@ -51,6 +43,22 @@ struct CityView: View {
 }
 
 private extension CityView {
+    
+    @ToolbarContentBuilder
+    var toolBarItems: some ToolbarContent {
+        ToolbarItem(placement: .navigationBarLeading) {
+            Button("Отменить") {
+                presentationMode.wrappedValue.dismiss()
+            }
+        }
+        ToolbarItem(placement: .navigationBarTrailing) {
+            Button("Добавить") {
+                viewModel.saveCity(city: city)
+                presentationMode.wrappedValue.dismiss()
+            }
+            .opacity(isCitySaved ? 0 : 1)
+        }
+    }
     
     func configureWeatherList(
         weather: CurrentWeather,
@@ -100,7 +108,8 @@ struct CityView_Previews: PreviewProvider {
                 lat: 56.839104,
                 lon: 60.60825,
                 localNames: nil
-            )
+            ),
+            isCitySaved: false
         )
     }
 }
