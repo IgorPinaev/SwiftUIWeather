@@ -15,6 +15,8 @@ enum WeatherEndpoint {
 
 extension WeatherEndpoint: EndpointProtocol {
     
+    static let apiKey = "YOUR API KEY"
+    
     var host: String {
         "api.openweathermap.org"
     }
@@ -31,7 +33,7 @@ extension WeatherEndpoint: EndpointProtocol {
     }
     
     var params: [String : String] {
-        var params = ["appid": "e382f69da8950542f476171cc68678de", "lang": Locale.current.languageCode ?? "en", "units": "metric"]
+        var params = ["appid": WeatherEndpoint.apiKey, "lang": Locale.current.languageCode ?? "en", "units": "metric"]
         switch self {
         case let .currentWeather(coordinates),
              let .forecast(coordinates):

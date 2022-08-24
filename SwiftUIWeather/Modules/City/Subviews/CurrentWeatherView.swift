@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CurrentWeatherView: View {
-    let weather: CurrentWeather
+    let weather: CurrentWeather?
     let name: String
     
     var body: some View {
@@ -17,9 +17,9 @@ struct CurrentWeatherView: View {
             VStack(alignment: .center, spacing: 4) {
                 Text(name)
                     .font(.title)
-                Text(weather.main.temp.toTempString)
+                Text(weather?.main.temp.toTempString ?? "--")
                     .font(.custom("System", size: 56))
-                Text(weather.weather.first?.description ?? "")
+                Text(weather?.weather.first?.description ?? "")
             }
             Spacer()
         }

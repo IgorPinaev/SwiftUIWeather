@@ -12,7 +12,7 @@ struct SwiftUIWeatherApp: App {
 
     var body: some Scene {
         WindowGroup {
-            FindCityView()
+            MainPageView()
                 .environment(\.managedObjectContext, CoreDataService.shared.viewContext)
         }
     }

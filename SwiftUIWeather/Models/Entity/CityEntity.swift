@@ -32,6 +32,6 @@ public class CityEntity: NSManagedObject {
 extension CityEntity : Identifiable {
 
     public var id: String {
-        return "\(lat)" + "\(lon)"
+        return "\(lat) \(lon)"
     }
 }

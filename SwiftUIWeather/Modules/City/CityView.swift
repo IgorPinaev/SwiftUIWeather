@@ -11,27 +11,22 @@ import Combine
 struct CityView: View {
     let city: City
     let isCitySaved: Bool
+    let isPresented: Bool
     
     @Environment(\.presentationMode) private var presentationMode
     @ObservedObject private var viewModel = CityViewModel()
     
     var body: some View {
-        NavigationView {
         VStack {
-            if let weather = viewModel.weather,
-               let hourly = viewModel.hourlyList,
-               let daily = viewModel.dailyList {
-                configureWeatherList(
-                    weather: weather,
-                    hourlyList: hourly,
-                    dailyList: daily
-                )
+            if isPresented {
+                toolBarItems
+                Spacer()
             }
-        }
-        .toolbar {
-            toolBarItems
-        }
-        .navigationBarHidden(!presentationMode.wrappedValue.isPresented)
+            configureWeatherList(
+                weather: viewModel.weather,
+                hourlyList: viewModel.hourlyList,
+                dailyList: viewModel.dailyList
+            )
         }
         .onAppear {
             viewModel.getCurrentWeather(coordinates: .init(
@@ -44,34 +39,39 @@ struct CityView: View {
 
 private extension CityView {
     
-    @ToolbarContentBuilder
-    var toolBarItems: some ToolbarContent {
-        ToolbarItem(placement: .navigationBarLeading) {
+    var toolBarItems: some View {
+        HStack {
             Button("Отменить") {
                 presentationMode.wrappedValue.dismiss()
             }
-        }
-        ToolbarItem(placement: .navigationBarTrailing) {
-            Button("Добавить") {
-                viewModel.saveCity(city: city)
-                presentationMode.wrappedValue.dismiss()
+            .padding(.leading)
+            Spacer()
+            if !isCitySaved {
+                Button("Добавить") {
+                    viewModel.saveCity(city: city)
+                    presentationMode.wrappedValue.dismiss()
+                }
+                .padding(.trailing)
             }
-            .opacity(isCitySaved ? 0 : 1)
         }
+        .padding(.top)
     }
     
     func configureWeatherList(
-        weather: CurrentWeather,
-        hourlyList: [Forecast],
-        dailyList: [DailyForecast]
+        weather: CurrentWeather?,
+        hourlyList: [Forecast]?,
+        dailyList: [DailyForecast]?
     ) -> some View {
         List {
             CurrentWeatherView(
                 weather: weather,
                 name: city.localName
             )
-            configureHourlyWeatherSection(hourlyList: hourlyList)
-            configureDailyWeatherSection(dailyList: dailyList)
+            if let hourlyList = hourlyList,
+               let dailyList = dailyList{
+                configureHourlyWeatherSection(hourlyList: hourlyList)
+                configureDailyWeatherSection(dailyList: dailyList)
+            }
         }
     }
     
@@ -109,7 +109,8 @@ struct CityView_Previews: PreviewProvider {
                 lon: 60.60825,
                 localNames: nil
             ),
-            isCitySaved: false
+            isCitySaved: false,
+            isPresented: false
         )
     }
 }

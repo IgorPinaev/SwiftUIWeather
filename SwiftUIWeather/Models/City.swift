@@ -31,6 +31,6 @@ extension City {
 extension City: Identifiable {
     
     var id: String {
-        return "\(lat)" + "\(lon)"
+        return "\(lat) \(lon)"
     }
 }
