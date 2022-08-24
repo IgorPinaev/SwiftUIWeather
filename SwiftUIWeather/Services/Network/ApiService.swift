@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-class ApiService<Endpoint: EndpointProtocol> {
+final class ApiService<Endpoint: EndpointProtocol> {
     
     func request(from endpoint: Endpoint) -> AnyPublisher<Data, Error> {
         guard let request = buildRequest(from: endpoint) else {

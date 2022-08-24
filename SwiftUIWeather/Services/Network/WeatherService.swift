@@ -14,7 +14,7 @@ protocol WeatherServiceProtocol {
     func findCity(name: String) -> AnyPublisher<[City], Error>
 }
 
-class WeatherService: WeatherServiceProtocol {
+final class WeatherService: WeatherServiceProtocol {
     
     private let apiService = ApiService<WeatherEndpoint>()
     

@@ -8,7 +8,7 @@
 import Foundation
 import CoreData
 
-class CoreDataService {
+final class CoreDataService {
     static let shared = CoreDataService()
     
     private lazy var container: NSPersistentContainer = {

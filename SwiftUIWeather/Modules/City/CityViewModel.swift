@@ -24,10 +24,10 @@ final class CityViewModel: ObservableObject {
             weatherService.getForecast(coordinates: coordinates)
         )
         .receive(on: RunLoop.main)
-        .sink { completion in
+        .sink { [weak self] completion in
             switch completion {
             case let .failure(error):
-                self.error = error
+                self?.error = error
             case .finished:
                 break
             }
