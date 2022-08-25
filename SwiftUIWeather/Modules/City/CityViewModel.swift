@@ -10,33 +10,21 @@ import Combine
 
 final class CityViewModel: ObservableObject {
     
+    var isNeedUpdate = PassthroughSubject<Void, Never>()
+    
     @Published private (set) var weather: CurrentWeather?
     @Published private (set) var hourlyList: [Forecast]?
     @Published private (set) var dailyList: [DailyForecast]?
     @Published private (set) var error: Error?
     
+    private let coordinates: Coordinates
+    
     private let weatherService = WeatherService()
     private var bag = Set<AnyCancellable>()
     
-    func getCurrentWeather(coordinates: Coordinates) {
-        Publishers.CombineLatest(
-            weatherService.getCurrentWeather(coordinates: coordinates),
-            weatherService.getForecast(coordinates: coordinates)
-        )
-        .receive(on: RunLoop.main)
-        .sink { [weak self] completion in
-            switch completion {
-            case let .failure(error):
-                self?.error = error
-            case .finished:
-                break
-            }
-        } receiveValue: { [weak self] weather, forecast in
-            self?.weather = weather
-            self?.hourlyList = Array(forecast.list.prefix(8))
-            self?.dailyList = self?.configureDailyData(forecastList: forecast.list)
-        }
-        .store(in: &bag)
+    init(coordinates: Coordinates) {
+        self.coordinates = coordinates
+        configurePublishers()
     }
     
     func saveCity(city: City) {
@@ -46,6 +34,28 @@ final class CityViewModel: ObservableObject {
 }
 
 private extension CityViewModel {
+    
+    func configurePublishers() {
+        isNeedUpdate
+            .flatMap { [weatherService, coordinates] _ in
+                Publishers.CombineLatest(
+                    weatherService.getCurrentWeather(coordinates: coordinates),
+                    weatherService.getForecast(coordinates: coordinates)
+                )
+            }
+        .receive(on: RunLoop.main)
+        .sink { [weak self] completion in
+            if case let .failure(error) = completion {
+                self?.error = error
+            }
+        } receiveValue: { [weak self] weather, forecast in
+            guard let self = self else { return }
+            self.weather = weather
+            self.hourlyList = Array(forecast.list.prefix(8))
+            self.dailyList = self.configureDailyData(forecastList: forecast.list)
+        }
+        .store(in: &bag)
+    }
     
     func configureDailyData(forecastList: [Forecast]?) -> [DailyForecast] {
         guard let forecastList = forecastList, let firstElement = forecastList.first else { return [] }

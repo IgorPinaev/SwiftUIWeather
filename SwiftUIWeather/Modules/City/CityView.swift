@@ -14,7 +14,18 @@ struct CityView: View {
     let isPresented: Bool
     
     @Environment(\.presentationMode) private var presentationMode
-    @ObservedObject private var viewModel = CityViewModel()
+    @ObservedObject private var viewModel: CityViewModel
+    
+    init(city: City, isCitySaved: Bool, isPresented: Bool) {
+        self.city = city
+        self.isCitySaved = isCitySaved
+        self.isPresented = isPresented
+        
+        viewModel = CityViewModel(coordinates: .init(
+            lat: city.lat,
+            lon: city.lon
+        ))
+    }
     
     var body: some View {
         VStack {
@@ -29,10 +40,7 @@ struct CityView: View {
             )
         }
         .onAppear {
-            viewModel.getCurrentWeather(coordinates: .init(
-                lat: city.lat,
-                lon: city.lon
-            ))
+            viewModel.isNeedUpdate.send()
         }
     }
 }

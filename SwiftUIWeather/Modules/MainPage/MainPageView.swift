@@ -13,7 +13,10 @@ struct MainPageView: View {
     @ObservedObject private var viewModel = MainPageViewModel()
     
     @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \CityEntity.name, ascending: true)],
+        sortDescriptors: [NSSortDescriptor(
+            keyPath: \CityEntity.name,
+            ascending: true
+        )],
         animation: .default
     )
     private var cityEntities: FetchedResults<CityEntity>

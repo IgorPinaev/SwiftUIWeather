@@ -14,11 +14,14 @@ struct FindCityView: View {
     @Environment(\.presentationMode) private var presentationMode
     @ObservedObject private var viewModel = FindCityViewModel()
     
-    @State private var city: City?
+    @State private var cityToShow: City?
     @State private var isCitySaved: Bool = false
     
     @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \CityEntity.name, ascending: true)],
+        sortDescriptors: [NSSortDescriptor(
+            keyPath: \CityEntity.name,
+            ascending: true
+        )],
         animation: .default
     )
     private var cityEntities: FetchedResults<CityEntity>
@@ -26,9 +29,9 @@ struct FindCityView: View {
     var body: some View {
         NavigationView {
             getCityList()
-                .searchable(text: $viewModel.city, prompt: "Search city")
+                .searchable(text: $viewModel.cityName, prompt: "Search city")
                 .navigationBarTitleDisplayMode(.inline)
-                .sheet(item: $city) { [isCitySaved] city in
+                .sheet(item: $cityToShow) { [isCitySaved] city in
                     CityView(
                         city: city,
                         isCitySaved: isCitySaved,
@@ -43,12 +46,12 @@ private extension FindCityView {
     
     @ViewBuilder
     func getCityList() -> some View {
-        if viewModel.city.isEmpty {
+        if viewModel.cityName.isEmpty {
             List {
                 ForEach(Array(cityEntities.enumerated()), id: \.element) { cityEntity in
                     Button(cityEntity.element.name) {
-                        self.tabSelection = cityEntity.offset
-                        self.presentationMode.wrappedValue.dismiss()
+                        tabSelection = cityEntity.offset
+                        presentationMode.wrappedValue.dismiss()
                     }
                     .padding()
                 }
@@ -57,8 +60,8 @@ private extension FindCityView {
         } else {
             List(viewModel.cityList) { city in
                 Button(city.localName) {
-                    self.city = city
-                    self.isCitySaved = cityEntities.contains(where: { $0.id == city.id })
+                    cityToShow = city
+                    isCitySaved = cityEntities.contains(where: { $0.id == city.id })
                 }
                 .padding()
             }

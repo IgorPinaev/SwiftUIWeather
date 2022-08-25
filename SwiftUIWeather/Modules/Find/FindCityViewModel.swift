@@ -10,14 +10,14 @@ import Combine
 
 final class FindCityViewModel: ObservableObject {
     
-    @Published var city = ""
+    @Published var cityName = ""
     @Published private (set) var cityList = [City]()
     
     private let weatherService = WeatherService()
     private var bag = Set<AnyCancellable>()
     
     init() {
-        $city
+        $cityName
             .dropFirst()
             .debounce(for: 0.3, scheduler: RunLoop.main)
             .removeDuplicates()
