@@ -50,7 +50,7 @@ private extension FindCityView {
             List {
                 ForEach(Array(cityEntities.enumerated()), id: \.element) { cityEntity in
                     Button(cityEntity.element.name) {
-                        tabSelection = cityEntity.offset
+                        tabSelection = cityEntity.offset + 1
                         presentationMode.wrappedValue.dismiss()
                     }
                     .padding()

@@ -16,6 +16,10 @@ struct City: Decodable, Hashable {
     var localName: String {
         localNames?[Locale.current.languageCode ?? "en"] ?? name
     }
+    
+    var coordinates: Coordinates {
+        Coordinates(lat: lat, lon: lon)
+    }
 }
 
 extension City {

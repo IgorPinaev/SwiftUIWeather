@@ -27,19 +27,7 @@ struct MainPageView: View {
     var body: some View {
         NavigationView {
             VStack {
-                if !cityEntities.isEmpty {
-                    TabView(selection: $tabSelection) {
-                        ForEach(Array(cityEntities.enumerated()), id: \.element) { cityEntity in
-                            CityView(
-                                city: City(from: cityEntity.element),
-                                isCitySaved: true,
-                                isPresented: false
-                            )
-                            .tag(cityEntity.offset)
-                        }
-                    }
-                    .tabViewStyle(.page)
-                }
+                tabView
             }
             .navigationBarHidden(true)
             .toolbar {
@@ -54,6 +42,25 @@ struct MainPageView: View {
                 FindCityView(tabSelection: $tabSelection)
             }
         }
+    }
+}
+
+private extension MainPageView {
+    
+    var tabView: some View {
+        TabView(selection: $tabSelection) {
+            CityView(city: nil, isCitySaved: true, isPresented: false)
+                .tag(0)
+            ForEach(Array(cityEntities.enumerated()), id: \.element) { cityEntity in
+                CityView(
+                    city: City(from: cityEntity.element),
+                    isCitySaved: true,
+                    isPresented: false
+                )
+                .tag(cityEntity.offset + 1)
+            }
+        }
+        .tabViewStyle(.page)
     }
 }
 

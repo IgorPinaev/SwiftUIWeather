@@ -9,22 +9,19 @@ import SwiftUI
 import Combine
 
 struct CityView: View {
-    let city: City
+    let city: City?
     let isCitySaved: Bool
     let isPresented: Bool
     
     @Environment(\.presentationMode) private var presentationMode
     @ObservedObject private var viewModel: CityViewModel
     
-    init(city: City, isCitySaved: Bool, isPresented: Bool) {
+    init(city: City?, isCitySaved: Bool, isPresented: Bool) {
         self.city = city
         self.isCitySaved = isCitySaved
         self.isPresented = isPresented
         
-        viewModel = CityViewModel(coordinates: .init(
-            lat: city.lat,
-            lon: city.lon
-        ))
+        viewModel = CityViewModel(coordinates: city?.coordinates)
     }
     
     var body: some View {
@@ -54,7 +51,7 @@ private extension CityView {
             }
             .padding(.leading)
             Spacer()
-            if !isCitySaved {
+            if let city = city, !isCitySaved {
                 Button("Add") {
                     viewModel.saveCity(city: city)
                     presentationMode.wrappedValue.dismiss()
@@ -73,7 +70,7 @@ private extension CityView {
         List {
             CurrentWeatherView(
                 weather: weather,
-                name: city.localName
+                name: city?.localName ?? viewModel.currentCityName ?? ""
             )
             if let hourlyList = hourlyList,
                let dailyList = dailyList{
