@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7D367B7C28B79F6400120AC5 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D367B7B28B79F6400120AC5 /* LocationService.swift */; };
 		7D70299C28B372D500DC8BC7 /* DailyForecast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D70299B28B372D500DC8BC7 /* DailyForecast.swift */; };
 		7D70299F28B37DCE00DC8BC7 /* FindCityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D70299E28B37DCE00DC8BC7 /* FindCityView.swift */; };
 		7D7029A128B37FB500DC8BC7 /* City.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D7029A028B37FB500DC8BC7 /* City.swift */; };
@@ -39,6 +40,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7D367B7B28B79F6400120AC5 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		7D70299B28B372D500DC8BC7 /* DailyForecast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyForecast.swift; sourceTree = "<group>"; };
 		7D70299E28B37DCE00DC8BC7 /* FindCityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindCityView.swift; sourceTree = "<group>"; };
 		7D7029A028B37FB500DC8BC7 /* City.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = City.swift; sourceTree = "<group>"; };
@@ -215,6 +217,7 @@
 			isa = PBXGroup;
 			children = (
 				7D99140828AFA820002DEE8C /* CoreDataService.swift */,
+				7D367B7B28B79F6400120AC5 /* LocationService.swift */,
 			);
 			path = Local;
 			sourceTree = "<group>";
@@ -322,6 +325,7 @@
 				7D99140B28AFA85F002DEE8C /* ApiService.swift in Sources */,
 				7D99140928AFA820002DEE8C /* CoreDataService.swift in Sources */,
 				7DF55C9528B6098F006409B8 /* MainPageView.swift in Sources */,
+				7D367B7C28B79F6400120AC5 /* LocationService.swift in Sources */,
 				7D99142528AFD197002DEE8C /* WeatherDescription.swift in Sources */,
 				7D99142E28B00C87002DEE8C /* ForecastResponse.swift in Sources */,
 				7D70299C28B372D500DC8BC7 /* DailyForecast.swift in Sources */,

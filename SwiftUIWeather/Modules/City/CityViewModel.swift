@@ -19,19 +19,12 @@ final class CityViewModel: NSObject, ObservableObject {
     @Published private (set) var error: Error?
     @Published private (set) var currentCityName: String?
     
-    @Published private var authorizationStatus: CLAuthorizationStatus?
-    @Published private var location: CLLocation?
-    
     private let coordinates: Coordinates?
     
     private let weatherService = WeatherService()
     private var bag = Set<AnyCancellable>()
     
-    private lazy var locationManager: CLLocationManager = {
-       let manager = CLLocationManager()
-        manager.delegate = self
-        return manager
-    }()
+    private let locationService = LocationService()
     
     init(coordinates: Coordinates?) {
         self.coordinates = coordinates
@@ -49,8 +42,7 @@ private extension CityViewModel {
     
     func configurePublishers() {
         if coordinates == nil {
-            locationManager.requestWhenInUseAuthorization()
-            locationManager.startUpdatingLocation()
+            locationService.start()
         }
         
         let presetCoordinates = isNeedUpdate
@@ -58,7 +50,7 @@ private extension CityViewModel {
                 self?.coordinates
             }
         
-        let geoCoordinates = Publishers.CombineLatest(isNeedUpdate, $location)
+        let geoCoordinates = Publishers.CombineLatest(isNeedUpdate, locationService.$location)
             .compactMap { _ , location -> Coordinates? in
                 guard let coordinate = location?.coordinate else { return nil }
                 return Coordinates(
@@ -86,6 +78,10 @@ private extension CityViewModel {
             self.dailyList = self.configureDailyData(forecastList: forecast.list)
         }
         .store(in: &bag)
+        
+        locationService.$currentCityName
+            .assign(to: &$currentCityName)
+            
     }
     
     func configureDailyData(forecastList: [Forecast]?) -> [DailyForecast] {
@@ -127,31 +123,5 @@ private extension CityViewModel {
             }
         
         return dailyList
-    }
-    
-    func setCityName(from location: CLLocation) {
-        
-        let geocoder = CLGeocoder()
-        geocoder.reverseGeocodeLocation(location) { [weak self] (placemarks, error) in
-            guard let placemark = placemarks?.first,
-                  let cityName = placemark.locality
-            else {  return }
-            
-            self?.currentCityName = cityName
-        }
-    }
-}
-
-extension CityViewModel: CLLocationManagerDelegate {
-    
-    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        authorizationStatus = manager.authorizationStatus
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let location = locations.last else { return }
-        self.location = location
-        
-        setCityName(from: location)
     }
 }

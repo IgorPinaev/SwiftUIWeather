@@ -48,6 +48,12 @@ private extension FindCityView {
     func getCityList() -> some View {
         if viewModel.cityName.isEmpty {
             List {
+                Button("Current city") {
+                    tabSelection = 0
+                    presentationMode.wrappedValue.dismiss()
+                }
+                .padding()
+                
                 ForEach(Array(cityEntities.enumerated()), id: \.element) { cityEntity in
                     Button(cityEntity.element.name) {
                         tabSelection = cityEntity.offset + 1
