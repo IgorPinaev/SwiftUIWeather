@@ -33,8 +33,10 @@ struct MainPageView: View {
             .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) {
                     Spacer()
-                    Button("List") {
+                    Button(action: {
                         showList = true
+                    }) {
+                        Image(systemName: "list.bullet")
                     }
                 }
             }
