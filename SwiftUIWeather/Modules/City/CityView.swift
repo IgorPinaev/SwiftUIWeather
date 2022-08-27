@@ -26,15 +26,19 @@ struct CityView: View {
     
     var body: some View {
         VStack {
-            if isPresented {
-                toolBarItems
-                Spacer()
+            if viewModel.isLocationEnabled == false {
+                disableLocationError
+            } else {
+                if isPresented {
+                    toolBarItems
+                    Spacer()
+                }
+                configureWeatherList(
+                    weather: viewModel.weather,
+                    hourlyList: viewModel.hourlyList,
+                    dailyList: viewModel.dailyList
+                )
             }
-            configureWeatherList(
-                weather: viewModel.weather,
-                hourlyList: viewModel.hourlyList,
-                dailyList: viewModel.dailyList
-            )
         }
         .onAppear {
             viewModel.isNeedUpdate.send()
@@ -43,6 +47,25 @@ struct CityView: View {
 }
 
 private extension CityView {
+    
+    var disableLocationError: some View {
+        VStack(spacing: 8) {
+            Text("Allow the app to detect your current location")
+                .font(.system(size: 24))
+                .multilineTextAlignment(.center)
+                
+            Button("Open settings") {
+                if let url = URL(string: UIApplication.openSettingsURLString), UIApplication.shared.canOpenURL(url) {
+                    UIApplication.shared.open(url)
+                }
+            }
+            .foregroundColor(.white)
+            .font(.system(size: 20))
+            .padding()
+            .background(.blue)
+            .cornerRadius(10)
+        }
+    }
     
     var toolBarItems: some View {
         HStack {

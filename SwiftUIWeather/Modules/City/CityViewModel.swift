@@ -18,6 +18,7 @@ final class CityViewModel: NSObject, ObservableObject {
     @Published private (set) var dailyList: [DailyForecast]?
     @Published private (set) var error: Error?
     @Published private (set) var currentCityName: String?
+    @Published private (set) var isLocationEnabled: Bool?
     
     private let coordinates: Coordinates?
     
@@ -81,7 +82,14 @@ private extension CityViewModel {
         
         locationService.$currentCityName
             .assign(to: &$currentCityName)
-            
+        
+        locationService.$authorizationStatus
+            .removeDuplicates()
+            .compactMap { [coordinates] in
+                guard let status = $0, coordinates == nil, status != .notDetermined else { return nil }
+                return [.authorizedAlways, .authorizedWhenInUse].contains(status)
+            }
+            .assign(to: &$isLocationEnabled)
     }
     
     func configureDailyData(forecastList: [Forecast]?) -> [DailyForecast] {
