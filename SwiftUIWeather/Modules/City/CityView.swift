@@ -40,6 +40,7 @@ struct CityView: View {
                 )
             }
         }
+        .background(Color(UIColor.systemGray6))
         .onAppear {
             viewModel.isNeedUpdate.send()
         }
