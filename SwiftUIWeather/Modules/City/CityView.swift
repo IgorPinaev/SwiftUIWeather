@@ -95,6 +95,7 @@ private extension CityView {
                 weather: weather,
                 name: city?.localName ?? viewModel.currentCityName ?? ""
             )
+            .listRowBackground(Color.clear)
             if let hourlyList = hourlyList,
                let dailyList = dailyList{
                 configureHourlyWeatherSection(hourlyList: hourlyList)
@@ -104,7 +105,7 @@ private extension CityView {
     }
     
     func configureHourlyWeatherSection(hourlyList: [Forecast]) -> some View {
-        Section {
+        Section(header: Text("Hourly")) {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 16) {
                     ForEach(hourlyList, id: \.self) { forecast in
@@ -117,7 +118,7 @@ private extension CityView {
     }
     
     func configureDailyWeatherSection(dailyList: [DailyForecast]) -> some View {
-        Section {
+        Section(header: Text("Daily")) {
             VStack(spacing: 24) {
                 ForEach(dailyList, id: \.self) { daily in
                     DailyWeatherView(daily: daily)

@@ -8,6 +8,6 @@
 import Foundation
 
 struct WeatherDescription: Decodable, Hashable {
-    let main: String
+    let main: WeatherStatus
     let description: String
 }

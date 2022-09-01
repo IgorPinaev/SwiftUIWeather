@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MainPageView: View {
     @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.colorScheme) private var colorScheme
     
     @ObservedObject private var viewModel = MainPageViewModel()
     
@@ -29,6 +30,11 @@ struct MainPageView: View {
             VStack {
                 tabView
             }
+            .background(
+                colorScheme == .light
+                ? Color(UIColor.systemGray6)
+                : .black
+            )
             .navigationBarHidden(true)
             .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) {
@@ -38,6 +44,7 @@ struct MainPageView: View {
                     }) {
                         Image(systemName: "list.bullet")
                     }
+                    .foregroundColor(.primary)
                 }
             }
             .fullScreenCover(isPresented: $showList) {
@@ -63,6 +70,7 @@ private extension MainPageView {
             }
         }
         .tabViewStyle(.page)
+        .indexViewStyle(.page(backgroundDisplayMode: .always))
     }
 }
 

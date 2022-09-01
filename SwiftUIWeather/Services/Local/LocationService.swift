@@ -33,10 +33,10 @@ private extension LocationService {
     func setCityName(from location: CLLocation) {
         
         let geocoder = CLGeocoder()
-        geocoder.reverseGeocodeLocation(location) { [weak self] (placemarks, error) in
+        geocoder.reverseGeocodeLocation(location) { [weak self] placemarks, error in
             guard let placemark = placemarks?.first,
                   let cityName = placemark.locality
-            else {  return }
+            else { return }
             
             self?.currentCityName = cityName
         }

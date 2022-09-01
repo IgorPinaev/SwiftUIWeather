@@ -13,6 +13,7 @@ struct HourlyWeatherView: View {
     var body: some View {
         VStack(spacing: 16) {
             Text(forecast.dt.hour)
+            Image(systemName: forecast.weather.first?.main.imageName ?? "")
             Text(forecast.main.temp.toTempString)
         }
     }
@@ -27,7 +28,12 @@ struct HourlyWeatherView_Previews: PreviewProvider {
                 tempMax: 26,
                 tempMin: 21
             ),
-            weather: []
+            weather: [
+                .init(
+                    main: .clouds,
+                    description: "Clouds"
+                )
+            ]
         ))
     }
 }

@@ -19,6 +19,8 @@ struct CurrentWeatherView: View {
                     .font(.title)
                 Text(weather?.main.temp.toTempString ?? "--")
                     .font(.system(size: 60))
+                Image(systemName: weather?.weather.first?.main.imageName ?? "")
+                    .font(.system(size: 42))
                 Text(weather?.weather.first?.description ?? "")
             }
             Spacer()
@@ -43,7 +45,7 @@ struct CurrentWeatherView_Previews: PreviewProvider {
                 ),
                 weather: [
                     .init(
-                        main: "Clouds",
+                        main: .clouds,
                         description: "clouds"
                     )
                 ]

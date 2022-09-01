@@ -29,6 +29,7 @@ struct FindCityView: View {
     var body: some View {
         NavigationView {
             getCityList()
+                .foregroundColor(.primary)
                 .searchable(text: $viewModel.cityName, prompt: "Search city")
                 .navigationBarTitleDisplayMode(.inline)
                 .sheet(item: $cityToShow) { [isCitySaved] city in

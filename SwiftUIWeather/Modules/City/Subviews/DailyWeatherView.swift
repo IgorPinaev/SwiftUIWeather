@@ -16,6 +16,7 @@ struct DailyWeatherView: View {
             Spacer()
             HStack(spacing: 16) {
                 Text(daily.minTemp.toTempString)
+                Text("—")
                 Text(daily.maxTemp.toTempString)
             }
         }
