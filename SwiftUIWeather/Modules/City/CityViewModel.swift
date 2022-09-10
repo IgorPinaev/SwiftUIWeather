@@ -122,7 +122,7 @@ private extension CityViewModel {
                     dailyList.append(.init(
                         maxTemp: max,
                         minTemp: min,
-                        day: date
+                        day: dailyList.isEmpty ? "Today" : date
                     ))
                     max = element.main.tempMax
                     min = element.main.tempMin

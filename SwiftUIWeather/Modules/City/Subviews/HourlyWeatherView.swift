@@ -11,10 +11,13 @@ struct HourlyWeatherView: View {
     let forecast: Forecast
     
     var body: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 8) {
             Text(forecast.dt.hour)
-            Image(systemName: forecast.weather.first?.main.imageName ?? "")
-            Text(forecast.main.temp.toTempString)
+            VStack {
+                Image(systemName: forecast.weather.first?.main.imageName ?? "")
+                    .frame(width: 32, height: 32)
+                Text(forecast.main.temp.toTempString)
+            }
         }
     }
 }

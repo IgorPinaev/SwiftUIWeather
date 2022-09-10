@@ -14,10 +14,14 @@ struct DailyWeatherView: View {
         HStack {
             Text(daily.day.capitalized)
             Spacer()
-            HStack(spacing: 16) {
+            HStack(spacing: 8) {
                 Text(daily.minTemp.toTempString)
+                    .multilineTextAlignment(.trailing)
+                    .frame(width: 60.0)
                 Text("—")
                 Text(daily.maxTemp.toTempString)
+                    .multilineTextAlignment(.leading)
+                    .frame(width: 60.0)
             }
         }
     }

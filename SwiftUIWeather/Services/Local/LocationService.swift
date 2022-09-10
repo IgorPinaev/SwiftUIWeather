@@ -20,6 +20,7 @@ final class LocationService: NSObject {
         locationManager = CLLocationManager()
         super.init()
         locationManager.delegate = self
+        locationManager.distanceFilter = 100
     }
     
     func start() {
